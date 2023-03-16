@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Stripe and Flask Demo</title>
+    <style>
+      table {
+        border: 1px solid black;
+      }
+      table th {
+        padding: 10px;
+        background: #ddd;
+      }
+      table td {
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Stripe and Flask Demo</h1>
+    <table>
+      <tr>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Order</th>
+      </tr>
+      {% for id in products %}
+      <!--The for-loop renders one row per product in the products dictionary. 
+        For each row the template renders the product name in the first column, 
+        the price in the second column, and a form with an order button in the third.-->
+      <tr>
+        <td>{{ products[id].name }}</td>
+        <td>
+          {{ "$%.2f"|format(products[id].price / 100) }} USD
+          {% if products[id].per %}per {{ products[id].per }}{% endif %}</td>
+        <td>
+          <form method="POST" action="/order/{{ id }}"> 
+            <!--
+              A form with a submit button used to trigger an order, instead of a much simpler link. 
+              This is a nice trick that you can use to force the browser to send a POST request when the user clicks the button.
+            
+              The action attribute in the form elements is set to a dynamic URL with the format /order/<product_id>. 
+              This will allow the Flask application to determine which product is being ordered.
+            -->
+            <input type="submit" value="Order Now!">
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
